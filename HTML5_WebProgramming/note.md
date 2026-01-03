@@ -1050,9 +1050,9 @@
     - 메서드
         - strokeRect(x,y,w,h): 테두리만 있는 사각형
             - 관련속성: strokeStyle, lineWidth, lineJoin, lineCap 
-        - fillRect(): 색이 채워진 사각형
+        - fillRect(x,y,w,h): 색이 채워진 사각형
             - 관련속성: fillStyle, grobalAlpha
-        - clearRect(): 지정 사각형 영역 지우
+        - clearRect(x,y,w,h): 지정 사각형 영역 지우
             - 주어진 영역을 rgba(0,0,0,0)으로 채움
 2. 캔버스 그림그리기 방식
     - 호출 즉시: 호출시 어떤 단계도 거치지않고 바로 캔버스에 그림을 그림
@@ -1094,7 +1094,6 @@
     - 관련속성
         - fillStyle: 도형을 채우는 색상(그라데이션,패턴)
         - globalAlpha: 색상의 투명도(값: 투명0.0~불투명1.0)
-
 3. 그라데이션 스타일: 두 가지 이상 색상이 점진적 변하는 효과
     - 선형 그라데이션: createLinearGradient(x1,y1,x2,y2)
     - 방사형 그라데이션: createRadialGradient(x1,y1,r1,x2,y2,r2)
@@ -1110,25 +1109,44 @@
         변수.addColorStrp(종료점오프셋, 색상);
         ctx.fillStyle=변수;
         ```
-    
-4. 패턴 스타일 _2
-5. 그림자 스타일 _3
-6. 도형 합성 _3
+
+4. 패턴 스타일: createPattern(이미지변수, 반복형식)
+    - 채우기를 위한 이미지 패턴 생성
+    - 반복형식: no-repeat, repeat-x, repeat-y, repeat
+5. 그림자 스타일
+    - 관련 속성
+        - shadowColor: 그림자 색상(기본값: rgba(0,0,0,0))
+        - shadowOffsetX: 대상 기준 그림자 수평오프셋(기본값=0)
+        - shadowOffsetY: 대상 기준 그림자 수직오프셋(기본값=0)
+        - shadowBlur: 그림자의 흐린정도(기본값=0)
+6. 도형 합성
+    - globalCompositeOperation속성: 도형이 그려지는 순서에 상관x 겹쳐지는 부분에 대한 다양한 처리
+        - 속성값: <u>source-over</u>, source-atop, source-in, source-out, destination-over, destination-atop, destination-in, destination-out, lighter, copy, xor
+            - source: 속성 지정 후에 그려진 도형 / destination: 속성 지정 전에 그려진 도형
 
 ### 텍스트와 이미지 그리기 -(4/5)
-4-4-3
+-4-3
 1. 텍스트 그리기
     - 관련 메서드
+        - strokeText(텍스트,x,y[,maxWidth]): 지정된 위치(x,y) 기준 테두리만 있는 텍스트를 그림.(maxWidth: 텍스트가 주어진 크기에 맞게 조정)
+        - fillText(텍스트,x,y[,maxWidth]): 지정된 위치(x,y) 기준 색이 채워진 텍스트를 그림.
+        - measureText(텍스트): 현재 글꼴에서 주어진 텍스트 폭 반환(width속성값)
     - 관련 속성
-2. 이미지 삽입하기: drawImage()
+        - font: 글자 스타일,크기,글자체 지정(기본값="10px sans-serif")
+        - textAlign: 수평 방향 정렬방식 지정(값: left, right, center, <u>start</u>, end)
+        - textBaseline: 텍스트 수직방향 기준선 지정(값: top, hanging, middle, <u>alphabetic</u>, ideographic, bottom)
+2. 이미지 삽입하기: drawImage(이미지변수[,sx,sy,sw,sh],dx,dy[,dw,dh])
 
 ### 도형변환 -(5/5)
-3-4-2-4
-- 도형 변환
-    1. 이동 변환
-    2. 크기 변환
-    3. 회전 변환
-    4. 사용자 정의 변환
+- 도형 변환: 캔버스의 좌표계 변환을 통해 그려지는 도형에 대한 변환효과 부여
+    1. 이동 변환: translate(x,y)
+    2. 크기 변환: scale(x,y) --1보다 크면 확대, [0,1]사이면 축소, 음수면 대칭(좌우/상하)
+    3. 회전 변환: rotate(각도) --시계방향, 기준점=왼쪽상단모서리, 각도=라디안
+    4. 사용자 정의 변환: transform(a,b,c,d,e,f)--이전에 호출한 값이 있다면 누적됨, setTransform(a,b,c,d,e,f)--누적X,항상 초기화됨
+        - a,d: 수평/수직방향 확대축소
+        - b,c: 수평/수직방향 기울임
+        - e,f: 수평/수직방향 이동
+        - `rotate(각도)`==`transform(Math.cos(각도), Math.sin(각도), -Math.sin(각도), Math.cos(각도), 0, 0)`
 
 <!-- *** -->
 ## Application
@@ -1148,12 +1166,20 @@
 <!-- *** -->
 ## Main Concepts
 ### 오디오/비디오 파일 제어 -(1/4)
+6-5-6(예제)
+
+- js를 통해 미디어 파일 재생 제어 가능
+    - 미디어 파일의 재생관련메서드: load(), play(), pause(), canPlayType()--특정 미디어파일 형식 재생가능여부 반환(값:probably, maybe,"")
+    
 
 ### 드래그 앤 드롭 -(2/4)
+2-5-3-3
 
 ### 웹 스토리지 -(3/4)
+6-12-3
 
 ### 위치 정보 -(4/4)
+6-6-4
 
 <!-- *** -->
 ## Application
