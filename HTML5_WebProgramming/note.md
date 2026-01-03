@@ -598,34 +598,124 @@
 
 ### 그라데이션 -(11/15)
 - 그라데이션: 두 개 색상 사이에서 점진적 변화
+- 사용법: `{background: {linear|radial|conic}-gradient(...)}`
 1. 선형 그라데이션
-    - linear-gradient(진행방향, 색상1, 색상2)
+    - `linear-gradient(진행방향, 색상1, 색상2, ...)`
         - 진행방향: `to 키워드` or `각도(deg)`
         - `키워드`: top(0deg), <u>bottom(180deg)</u>, right(90deg), left(270deg),\
         top right(45deg), bottom right(135deg), top left(315deg), bottom left(225deg)
-        - 색상 여러개O: `색상1[위치백분율%], 색상2[위치백분율%][, 색상3[위치백분율%], ...]`
-    - repeating-linear-gradient(): 마지막 `색상[위치백분율%]`표기를 기준으로 반복횟수 결정
+        - 색상 2개 이상인 경우 `색상1[위치백분율%], 색상2[위치백분율%][, 색상3[위치백분율%], ...]`
+    - `repeating-linear-gradient(진행방향, 색상1, 색상2, ...)`: 마지막 `색상[위치백분율%]`표기를 기준으로 반복횟수 결정
 2. 방사형 그라데이션
-    - radial-gradient()
-    - repeating-radial-gradient()
+    - `radial-gradient(<shape> <size> at <position>, 색상1, 색상2, ...)`
+        - shape: <u>ellipse</u>(타원), circle
+        - size: closest-side(가까운 모서리까지), farthest-side(먼 모서리까지), closest-corner(가까운 꼭짓점까지), <u>farthest-corner</u>(먼 꼭짓점까지)
+        - position(중심의 위치): px, % (기본값=center)
+    - `repeating-radial-gradient(<shape> <size> at <position>, 색상1, 색상2, ...)`: 마지막 `색상[위치백분율%]`표기를 기준으로 반복횟수 결정(size기준까지의 반복횟수를 의미함.)
 3. 원뿔형 그라데이션 
-    - conic-gradient()
-    - repeating-conic-gradient()
-### 변형 -(12/15)
+    - `conic-gradient([from 시작각도][ at 중심위치,] 색상1[위치각도deg], 색상2[위치각도deg], ...)`
+        - 시작각도: deg (기본값=0deg=12시방향)
+        - 중심위치: %, px (기본값=50% 50%)
+    - `repeating-conic-gradient([from 시작각도][ at 중심위치,] 색상1[위치각도deg], 색상2[위치각도deg], ...)`: 마지막 `색상[위치각도deg]`표기를 기준으로 반복횟수 결정
 
----
+### 변형 -(12/15)
+- 요소 형태,크기,위치 변경 효과
+    - 이동translate, 회전rotae, 크기변경scale, 기울임skew
+- 관련 속성
+    1. transform: 요소에 변형지정(변형함수)
+        - 값: <u>`none`</u>, `<변형함수>+`
+        - 변형함수(다중 변환 지정 가능)
+            - 이동: 요소 중앙점 기준 (음수O)
+                - translate(x,y), translate3d(x,y), translateX(x), translateY(y), translateZ(z)
+            - 크기: 
+                - scale(x,y), scale3d(x,y), scaleX(x), scaleY(y), scaleZ(z)
+            - 회전: rotate(angle), rotate3d(x,y,z,angle), angleX(angle), angleY(angle), angleZ(angle)
+            - 기울임: skew(x-angle, y-angle), skewX(x), skewY(y)
+            - 변환행렬 matrix(scaleX(),skewY(),skewX(),scaleY(),translateX(),translateY()): 이동, 크기확대축소, 회전, 기울임을 한번에 지정
+                - 값: 소수포함 정수(기본값= 1,0,0,1,0,0)
+                - 단위 입력 불필요(크기:배수, 기울임:각도, 이동:픽셀 로 간주)
+                - matrix3d(n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n)
+    2. transform-origin: 요소 박스에 대한 변형 기준점
+        - 값: `<X축값> <Y축값> [<Z축값>]`
+            - X축값: left(=0%), center(=50%), right(=100%), <길이>, %
+            - Y축값: top(=0%), center(=50%), bottom(=100%), <길이>, %
+            - Z축값: <길이>(기본값=0)
+        - transform 속성과 함께 사용!
+    3. perspective: 3차원 공간 상 해당 요소와 관측점 거리 지정 (자식요소에 원근감 적용됨.)
+        - 값: <u>`none`</u>, `<길이>`
+            - 길이가 작을수록 더 기울여지는 정도가 커보임
+    4. perspective-origin: 원근 조절 시 X축,Y축에 대한 기준점 지정
+        - 값: `<길이>`, `%`, `left`, `center`, `right`, `top`, `bottom`
+        - perspective 속성과 함께 사용!
+    5. backface-visibility: 요소 뒷면 표시 여부 지정
+        - 값: <u>`visible`</u>, hidden
+
 ### 전환 -(13/15)
+- 어떤 이벤트에 대해 지정 시간내 속성 상태->다른 상태로 부드럽게 변화
+    - 점진적 변화: 애니메이션 효과 부여
+- 방법: 어떤 이벤트에 부여할지 -> 속성의 처음상태와 최종상태 지정
+- 속성
+    - transition-property속성: 전환이 적용될 속성이름 나열(구분자: 콤마)
+    - transition-duration속성: 전환 진행 시간 지정
+    - transition-delay속성: 전환 효과 시작 전 대기시간 지정(값: `초(s)`,`밀리초(ms)`)
+    - transition-timing-function속성: 전환 진행 속도의 형식 지정
+        - 값: <u>`ease`</u>(slow->fast->slow), linear, ease-in(slow->fast), ease-out(fast->slow), ease-in-out,\
+        steps(n,start|end)--(전환진행을 나눠보여줄 간격개수n, 각간격에서 전환효과가 발생하는 지점)--, step-start, step-end, cubic-bezier(n,n,n,n)
+- 여러 속성 전환 지정 시: transition의 각 속성에서 콤마로 구분하여 대응
+- 전환 일괄 지정: transition속성
+    - `-property값 -duration값 -timing-function값 -delay값` 1개 이상을 콤마로 구분하여 지정
+    - 생략가능: timing-function값, transition-delay값
+- 전환 부여 가능 속성에 제한o
+- 변형(transform 등)을 활용한 전환O
 
 ### 애니메이션 -(14/15)
+- 키 프레임: 애니메이션 구성하는 움직임의 키가 되는 프레임(각 프레임 연결->동작 구성)
+```css
+@keyframes 애니메이션이름{
+    from { 애니메이션의 시작시점에서 CSS스타일 }
+    [ percentage { 해당 중간시점에서 CSS스타일 } 
+     ... ]*
+    to { 애니메이션 종료시점에서 CSS스타일 }
+}
+```
+- 애니메이션 속성
+    - animation-name: 키프레임 이름 (값: <u>none</u>, <키프레임이름>)
+    - animation-duration: 한 사이클 실행시간 (값: <u>0</u>, <초>)
+    - animation-delay: 시작 전 대기시간 (값: <u>0</u>, <초>)
+    - animation-timing-function: 진행속도 형식 (값: ease, linear, ease-in, ease-out, ease-in-out)
+    - animation-iteration-count: 반복횟수 (값: <횟수>--기본값=1, infinite)
+    - animation-direction: 진행방향 (값: <u>normal</u>, reverse, alternate, alternate-reverse)
+    - animation-play-state: 실행상태or일시정지상태 (값: <u>running</u>, paused)
+    - animation-fill-mode: 실행 이전/이후의 스타일 유지여부 (값: <u>none</u>, forwards, backwards, both)
+    - 일괄지정(animation): (필수) -name, -duration,\
+    -timing-function, -delay, -iteration-count, -direction, -fill-mode, -play-state
+- 변형(rotate 등)을 활용 가능
 
 ### 다단 -(15/15)
+- 다단 지정
+    - columns: `column-width값 column-count값`
+        - -width: 단의 폭(값: <u>auto</u>, <길이>)
+        - -count: 단의 개수(값: <u>auto</u>, <개수>)
+        - 두개가 동시에 auto 불가, 1개만 지정시 나머지는 요소의 폭에 따라 자동지정
+- 속성
+    - column-gap: 단과 단 사이 간격 (값: <u>normal</u>--기본값=1em, <길이>)
+    - column-rule: 단과 단 사이 구분선 관련속성 일괄지정
+        - -width: 굵기 (값: thin, medium, thick, <길이>)
+        - -style: 스타일 (값: none, hidden, dotted, dashed, solid, double, groove, ridge, inset, outset)
+        - -color: 색상 (값: <색상>, transparent)
+    - column-span: 요소가 얼마나 많은 단을 차지해서 표시할지 (값: <u>none</u>, all)
+    - column-fill: 각 단을 채우는 콘텐츠 양 조절-> 각 단의 높이 차이 최소화 여부 (값: <u>balance</u>, auto)
 
 <!-- *** -->
 ## Application(~3)
 ### example review
 ### confusing point
-### extension point
-(implement)
+- perspective: 3차원 공간 상 해당 요소와 관측점 거리 지정 (자식요소에 원근감 적용됨.)
+    - 값으로 지정한 길이가 작을수록 더 기울여지는 정도가 커보임 -> 왜?
+### extension point(implement)
+- css 너무 지엽적으로 복잡하다
+    1. 왜 이래야만 할까?
+    2. 더 편리한 툴이 뭐가 있고 그건 어떻지?
 ## Reference(bookmark)
 
 
@@ -641,6 +731,7 @@
 - HTML5의 공식적 스크립트 언어
     - 스크립트: 프로세서가 아닌 다른 프로그램에 의해 번역or수행되는 프로그램/명령어나열
     - 사용자-페이지 간의 상호작용o(생동감, 동적웹페이지)
+
 ### 선언 -(2/8)
 - 선언방식
     1. 내부 스크립트 방식: 문서에서 `<srcipt>`요소 사용(종료 태그O)
@@ -649,32 +740,190 @@
 - 주석
     - 한줄 주석: `//`
     - 여러줄 주석: `/* */`
+
 ### 변수와 자료형 -(3/8)
-1. 변수
-2. 식별자
+1. 변수: 프로그램에서 다루는 데이터 저장 공간
+    - 선언: 저장할 적정크기의 공간 확보
+    - 자료형(데이터 종류)와 식별자(구별할 이름)이 필요
+2. 식별자: 변수이름or함수이름(프로그래머가 만든 단어)
+    - 지정규칙:\
+    (필수) 첫글자=영문자,언더바(\_),\$로 시작, 두번째~=영문자,숫자,언더바(\_),\$, 대소문자구분, 키워드(let,if,for,function,...)사용불가\
+    (권장) 카멜케이스, 의미내포&충분한길이의 단어
 3. 자료형
+    - 숫자형: 정수(10진수:0으로 시작x, 8진수:0으로 시작, 16진수:0x 또는 0X로 시작), 실수(소수점 포함 숫자)
+    - 문자열: 따옴표(")로 묶인 일련문자
+    - 논리형: 참(true)/거짓(false)
+    - null형: 내용이 전혀없는 공백값(변수 초기화 시 사용)
 4. 변수선언
+    - 명시적 선언 없이 사용 가능(자동 생성, 값 대입 시 자료형 결정)
+    - 명시적 선언 시: `let 변수명` => 자료형 무관(저장되는 값에 따라 결정)
+        - 함수 내에서 let으로 선언 -> 지역변수
+        - 함수 밖 or let없이 선언 -> 전역변수
 5. 상수선언
+    - 예약어 const 사용
+    - 값의 변경/재지정 불가
+    - 사용범위: 선언된 블록 내
 
 ### 연산자 -(4/8)
+1. `(),[]`
+2. `!,++,--,~`
+3. `**`, `*,/,%`
+4. `+,-`, `>>,<<,>>>`
+5. `>,<,>=,<=`, `>==, !=, ===, !=`
+6. `&`, `^`, `|`, `&&`, `||`, `?:`
+7. `=, +=, -=, /=, *=, %=`
 
 ### 조건문과 반복문 -(5/8)
+1. 조건문
+    ```js
+    //if문
+    if(조건식)
+        문장
 
+    if(조건식) {
+        문장...;
+    }
+    //if-else문
+    if(조건식) {
+        문장1;...
+    }
+    else {
+        문장a;...
+    }
+    //switch문
+    switch(표현식){
+        case 값1:문장;...
+            break;
+        case 값2:문장;...
+            break;
+        ...
+        default:문장;...
+    }
+    ```
+2. 반복문
+    ```js
+    //for문
+    for(초기식;조건식;증감식){
+        문장...;
+    }
+    //while문
+    while(조건식){
+        문장...;
+    }
+    //do-while문
+    do{
+        문장...;
+    } while(조건식)
+    ```
 ### 함수 -(6/8)
-- 
-- 무명함수
-- 콜백함수
+- 보통 head부분에서 정의
+    - 정의
+        ```js
+        function 함수명([매개변수1, ... ,매개변수n]){
+            문장;
+            ...
+            [return 반환값;]
+        }
+        ```
+    - 호출: `[ 변수 ]=함수명([매개변수1, ..., 매개변수n];`
+- 무명함수: 함수명 지정X로 선언된 함수 (함수를 변수에 저장, 나중에 한번만 호출해 사용)
+    - 정의
+        ```js
+        let 변수 = function([매개변수1, ... ,매개변수n]){
+            문장;
+            ...
+            [return 반환값;]
+        }
+        ```
+    - 호출: `변수([매개변수1, ..., 매개변수n]);`
+- 콜백함수: 매개변수로 전달되는 함수 
+    - (완결성이 있는 단위작업을 반복해야할때 단순출력과 로직을 분리하는 용도?)
+    ```js
+        function runNTimesSum(n, callback){
+            for(let i=1; i<=n; i++){
+                document.write("1+...+"+i+"까지의 합:")
+                callback(i)
+            }
+        }
+        n_sum(10, function(n){
+            let sum=0;
+            for(let i=1; i<=n; i++){
+                sum+=i;
+            }
+            document.wirte(sum+"<br/>");
+        })
+    ```
 - 대화상자 관련 함수
-    1. 알림창 alert()
-    2. 확인창 confirm()
-    3. 입력창 prompt()
+    1. 알림창 alert("메시지"): "확인" 버튼을 갖는 메시지 창을 띄우는 함수 (경고 같은 안내메세지)
+    2. 확인창 confirm("메시지"): 메세지를 보여주고 "확인" 또는 "취소"버튼을 선택하도록 하여 이 결과값에 따라 다음 작업 수행
+    3. 입력창 prompt("대화상자설명", 기본값): 사용자에게 키보드로 데이터 입력받을때 사용
 ### 객체 -(7/8)
 - 자바스크립트 작업 대상(기본자료형)
-- 실세계 유무형의 것 모델리
+- 실세계 유무형의 것 모델링 <- 변수,함수를 그룹화
+    - 속성: 객체 특성/상태를 표현-데이터
+    - 메서드: 객체 관련 작업 처리-함수(데이터 동작 규칙/방법)
+- 객체 생성: `객체변수 = new 객체명([매개변수리스트]);`
+- 객체 사용: `객체변수.속성`, `객체변수.메서드([매개변수리스트]);`
 1. 내장 객체(코어객체)
+    - String 객체: 문자모양 지정or문자열 다룸
+        - new연산자 사용 or 문자열을 변수에 할당 시 자동생성
+        - 속성: length(문자열 길이 반환)
+        - 메서드
+            1. 글꼴 관련: big(), small(), bold(), italics(),\
+            strike(), sub(), sup(), fontcolor("색상"), fontsize(1~7숫자)
+            2. 문자열처리 관련: toLowerCase(), toUpperCase(), substring(n1,n2), slice(n1,n2), substr(i,n),\
+            charAt(i), indexOf("문자"), lastIndexOf("문자"), concat("문자열"),\
+            replace('문자열1','문자열2'), split("구분자",개수), charCodeAt(i), String.fromCharCode(유니코드번호), " 공백포함문자열 ".trim()
+            3. 위치이동 관련: "문자열".link("URL"), "문자열".anchor("이름") --URL은 #이름 or 외부주소 형태
+    - Array 객체: 배열 사용을 위한 객체
+        - 생성: `배열객체변수 = new Array()`, `배열객체변수 = new Array(배열크기)`, `배열객체변수 = new Array(배열요소1, ... ,배열요소n)`
+        - 속성: length(배열 길이 반환)
+        - 메서드: join(), indexOf("데이터"), push("데이터"), shift(),\
+        reverse(), concat(배열2), sort(), pop(), slice(i,j)
+    - Date 객체: 사용자 시스템 날짜/시간 관리 객체
+        - 생성: `객체변수 = new Date()`, `객체변수 = new Date(년,월,일[,시[,분[,초[,밀리초]]])`
+        - 메서드: 
+            - get/set: __FullYear(), __Month()--월(0:1월~11:12월), __Date(), __Day()--요일(0:일요일~6:토요일), __Hours(), __Minutes(), __Seconds(), __Milliseconds(), __Time()--70.01.01 0시부터의 시간을 1/1000초 단위
+            - 표시형식지정: toGMTString(), toLocaleString(), toString()
+    - Math 객체
+        - 속성: PI(파이), SQRT2(루트2)
+        - 메서드
+            - abs(n), acos(n), asin(n), atan(n), atan2(x,y), cos(n), tan(n)
+            - ceil(n), floor(n), exp(n), log(n)
+            - max(n,m), min(n,m), pow(n,m)
+            - random(), round(n), sin(n), sqrt(n)
 2. 사용자 정의 객체
-### 이벤트 -(8/8)
+- 프로토타입 기반 언어
+- 일반함수와 동일형식의 생성자함수 이용
+    ```js
+    function 프로토타입명(매개변수1, ..., 매개변수n){
+        this.속성1=매개변수1;
+        ...
+        this.속성n=매개변수n;
+        this.메서드1=function() { ... }
+        ...
+        this.메서드n=function() { ... }
+    }
+    ```
 
+### 이벤트 -(8/8)
+- 사용자가 어떠한 동작수행 or 문서/브라우저 상태가 변할때 발생하는 특정 사건/동작
+    - 이벤트: 사건/동작
+    - 이벤트 리스너: 처리내용 (js코드로 작성, 호출되어 수행)
+- 주요 이벤트
+    1. 윈도우: `load`, `unload`(문서 및 이미지 로딩 완료/문서 닫을때)
+    2. 포커스: `focus`, `blur`(객체가 포커스를 가질때/잃을때)
+    3. 폼: `change`(input,select요소등의 값이 변경 시), `select`(입력된 텍스트를 사용자가 선택 시), `submit`(submit버튼을 눌러 폼을 전송 시), `reset`(reset버튼으로 초기화 시)
+    4. 키보드: `keydown`(누르는 순간), `keyup`(누른 키를 놓는 순간), `keypress`(눌렀다 놓는 순간)
+    5. 마우스: `click`(클릭), `dbclick`(더블클릭), `mousedown`(마우스버튼 누르는 순간), `mouseup`(눌러진 마우스버튼을 놓는 순간), `mousemove`(마우스가 객체위에서 움직이는 동안), `mouseover`(커서가 객체영역 안으로 들어가는 순간), `mouseout`(커서가 객체영역 밖으로 벗어나는 순간)
+- 이벤트 리스너 작성방법
+    1. `<요소명 속성="값" ... on이벤트명="자바스크립트코드">`
+    2. `addEventListener("이벤트명", 실행함수명);`
+- 이벤트 객체: 이벤트와 관련된 다양한 정보o 객체
+    - 전달하는 함수에서의 매개변수명: event 사용
+        - 전달받는 함수에서의 매개변수명->원하는 이름 지정
+    - 정보?: 이벤트 종류에 따라 다름
+        - ex. 마우스클릭(커서위치, 클릭한마우스버튼 등), 키보드조작(눌러진 키이름,문자열, alt/shift/ctrl과 함께press 여부 등)
 <!-- *** -->
 ## Application
 ### example review
@@ -692,8 +941,78 @@
 <!-- *** -->
 ## Main Concepts
 ### 문서 객체모델 -(1/2)
+1. Document Object Model
+    - 문서객체: html 각 요소를 js에서 사용가능하도록 객체로 만듦
+    - DOM: 브라우저가 표준 html문서에 접근가능하도록 정의한 표준모델 (HTML문서를 분석/표시하는 방식)
+    - 생성: 문서 적재->브라우저가 정적으로 DOM생성
+        - 계층적 구조를 갖는 DOM트리 형태
+        - js이용 => 프로그램 실행 중 웹문서 내용/구조/스타일에 작업가능=즉각적으로 화면 반영o
+2. DOM객체 접근방법
+    - id속성 이용: `getElementById("아이디명")` --아이디명을 id속성값으로 갖는 오직 하나의 요소 선택
+    - 요소명 이용: `getElementByTagName("요소명")` --지정 요소명 모두를 선택, 리스트형태로 반환
+    - 클래스명 이용: `getElementByClassName("클래스명")` --클래스명을 class속성값으로 갖는 모든 요소, 리스트형태로 반환
+3. 요소 수정(내용/속성/스타일)
+- 내용
+    - innerHTML속성: HTML형식으로 요소내용을 다룰때\
+    `DOM변수 = document.getElementById("아이디명");`
+        - get: `변수 = DOM변수.innerHTML`
+        - set: `DOM변수.innerHTML = "값"`
+    - textContent속성: 
+        - get: HTML요소,속성을 제외하고 텍스트내용만 가져오는 경우(`변수 = DOM변수.textContent`)
+        - set: HTML요소를 일반텍스트로 취급해 요소내용지정(`DOM변수.textContent = "값"`)
+- 속성
+    - HTML요소 속성을 그대로 사용, 새로운 값 할당
+    - `document.getElementById("아이디명").속성=값`
+- 스타일
+    - css스타일 동적수정O: `document.getElementById("아이디명").style.CSS속성명=값`
+    - css속성명이 하이픈포함->하이픈을 없애고 카멜케이스로 표기
+4. 새로운 요소 삽입
+    - 텍스트내용이 있는 요소
+        1. 요소 DOM객체 생성: `let 새요소변수=document.createElement("삽입요소명")`
+        2. 요소에 텍스트 내용: `새요소변수.innerHTML="텍스트내용"`
+            - or `let 텍스트변수=document.createTextNode("텍스트내용")` `새요소변수.appendChild(텍스트변수)`
+            + CSS스타일추가: `새요소변수.style.CSS속성명=값`
+        3. 새요소의 부모요소를 찾아 자식요소로 연결: `let 부모요소변수=document.getElementById("부모요소아이디명")` `부모요소변수.appendChild(새요소변수)`
+    - 속성이 있는 요소
+        1. 요소 DOM객체 생성: `let 새요소변수=document.createElement("삽입요소명")`
+        2. [요소의 속성,속성값 추가]+: `새요소변수.setAttribute("속성명","속성값")`
+            - or `let 속성변수=document.createAttribute("속성명");` `속성변수.value="속성값";` `새요소변수.setAttributeNode(속성변수);`
+        3. 새요소의 부모요소를 찾아 자식요소로 연결: `let 부모요소변수=document.getElementById("부모요소아이디명");` `부모요소변수.appendChild(새요소변수)`
+5. 기존 요소 삭제
+- DOM구조에서 삭제하려는 노드의 부모노드 찾기->removeChild()메서드 적용
+- `부모요소.removeChild(삭제하려는요소)`
 
 ### 브라우저 객체모델 -(2/2)
+- Browser Object Model: 브라우저를 객체로 표현한 것
+    - window (최상위객체)
+        - document (HTML 문서를 표현, DOM객체의 최상위객체)
+        - history (사용자가 방문한 URL)
+        - location (현재 URL에 대한 정보유지)
+        - navigator (현재 사용중인 브라우저 정보관리)
+        - screen (스크린 장치에 대한 정보관리)
+    - 특정객체의 메서드/속성 사용: `window. ... .객체.속성`, `window. ... .객체.메서드()`
+- window 객체: 창에 대한 전반적인 모든상황 제어(최상위객체)
+    - 각 윈도우마다 하나의 window객체 생성
+    - 메서드
+        - open(), close(): 새로운 윈도우를 열기/열린 창을 닫기
+            - `open(연결할URL, target창, 윈도우속성리스트)`
+                - target창: (값: `_blank`, `_self`, `창의 이름`)
+                - 속성리스트: `"속성=값,속성=값,..."`
+                    - location: y/n(주소표시줄 표시여부)
+                    - status: y/n(상태표시줄 표시여부)
+                    - menubar: y/n(메뉴바 표시여부)
+                    - resizable: y/n(사용자에 의한 창크기조절 가능여부)
+                    - height, width: px(윈도우 높이/너비)
+                    - left, top: px(윈도우 표시될 x축/y축 위치)
+        - setInterval("호출함수", 시간간격): 일정시간 간격 함수 무한반복호출
+            - clearInterval(timerID): 무한히 반복되는 동작을 정지시키는 함수(`timerID=setInterval(...)`)
+        - setTimeout("호출함수", 지연시간): 일정 시간 후 지정함수 수행
+            - 지연시간: 코드실행까지의 시간, 1/1000초 단위
+            - clearTimeout(timerID): 설정된 시간 전에 실행 해제하는 함수(`timerID=setTimeout(...)`)
+        - alert(), confirm(), prompt(): 경고창, 확인창, 입력창
+        - moveBy(x,y), moveTo(x,y): 창의 (상대/절대)위치 이동
+        - resizeBy(w,h), resizeTo(w,h): 창의 (상대/절대)크기 조정
+
 <!-- *** -->
 ## Application
 ### example review
@@ -701,7 +1020,6 @@
 ### extension point
 (implement)
 ## Reference(bookmark)
-
 
 <!-- ------------------------------ -->
 # Chapter 6. 캔버스
@@ -712,14 +1030,106 @@
 <!-- *** -->
 ## Main Concepts
 ### 캔버스 개요 -(1/5)
-
+1. 자바스크립트 코드를 이용해 웹브라우저에 그림 그리기 기능
+    - 별도 프로그램 설치X
+    - 단순 그림을 그리는 기능 + 그림 합성,변환,애니메이션과 같은 다양한 효과 표현
+2. 방법
+    1. canvas요소(컨테이너)를 사용해 그림영역 지정
+    2. js코드 사용, 해당영역에 실제 그림 그리기
+3. canvas 요소: 캔버스 영역(웹페이지에 그림이 그려지는 투명 사각형 영역) 지정
+    - `<canvas id="아이디" width="폭" height="높이">canvas요소 미지원 브라우저에 출력할 내용</canvas>`
+    - id속성 필수지정, width/height생략시 기본값=300px/150px
+4. 캔버스 객체 & 캔버스 컨텍스트 객체
+    - 캔버스 생성 -> 캔버스 객체 생성 -> 캔버스 컨텍스트 객체 생성 -> 실제 그림그리기 작업
+        - 캔버스 객체 생성: `let cvs변수1=document.getElementById('canvas요소id속성값');`
+        - 캔버스 컨텍스트 객체 생성: `let ctx변수2=cvs변수1.getContext('2d');`
+        - 그림 그리기 작업: `ctx변수2.메서드()`, `ctx변수2.속성`
+    
 ### 선과 도형 그리기 -(2/5)
+1. 사각형 그리기: 시작점(x,y), 폭w, 높이h
+    - 메서드
+        - strokeRect(x,y,w,h): 테두리만 있는 사각형
+            - 관련속성: strokeStyle, lineWidth, lineJoin, lineCap 
+        - fillRect(): 색이 채워진 사각형
+            - 관련속성: fillStyle, grobalAlpha
+        - clearRect(): 지정 사각형 영역 지우
+            - 주어진 영역을 rgba(0,0,0,0)으로 채움
+2. 캔버스 그림그리기 방식
+    - 호출 즉시: 호출시 어떤 단계도 거치지않고 바로 캔버스에 그림을 그림
+        - 사각형 그리기(strokeRect(), fillRect(), clearRect())
+        - 텍스트 그리기(strokeText())
+        - 이미지 그리기(drawImage())
+    - 패스 기반: 각 도형을 이루는 선(=서브패스)들의 집합
+        - 과정
+            1. 패스 초기화: beginPath()--이전 패스를 모두 지우고 새로운 패스 그림
+            2. 다양한 메서드 사용해 패스 지정->선/도형 그림
+                - moveTo(x,y): 주어진 점 시작으로 새로운 서브패스 만듦
+                - lineTo(x,y): 바로 이전의 점과 현재의 점을 연결하는 선을 그림
+                - rect(x,y,w,h): 사각형을 그림
+                - arc(x,y,r,...): 원/원호를 그림
+            3. 지정한 패스 닫기: closePath()--현재 패스를 닫음
+            4. 선/도형 출력: stroke()/fill()--현재 패스에 있는 도형들을 선형태로/내부를 채워 실제 캔버스에 그림
+3. 패스 기반 여러 도형 그리기
+    1. 선 그리기: `ctx.beginPath();` -> `ctx.moveTo(x1,y1)` -> `ctx.lineTo(x2,y2)` -> `ctx.stroke()`
+    2. 다각형 그리기
+        - 방법1: 선을 그리는 lineTo()를 연속적으로 사용
+        - 방법2: 선 그리기 메서드 + closePath()--맨 마지막 점과 첫번째 점(moveTo(x,y))을 연결하는 직선을 자동 추가하는 메서드
+    3. 원/원호 그리기: arc(x,y,r,시작각도,종료각도,그리는방향)
+        - 시작각도/종료각도: 라디안 단위(=각도*Math.PI/180), 3시를 기점으로 시계방향으로 부여
+        - 그리는 방향: false(기본값, 시계방향), true(반시계방향)
+    4. 부채꼴 그리기: `moveTo(x,y)` -> `arc(x,y,...)` -> `closePath()`
 
 ### 스타일 지정 -(3/5)
+1. 선 스타일
+    - 관련속성
+        - strokeStyle: 선의 색상or그라데이션,패턴)
+        - lineWidth: 선의 두께, 기본값=1px
+        - lineJoin: 두 선이 만나 꺾이는 모서리부분 모양
+            - 값: <u>`miter`</u>,`round`,`bevel`
+        - lineCap: 선의 양쪽 끝부분 모양
+            - 값: <u>`butt`</u>,`round`,`square`
+    - 점선 그리기: setLineDash() --원하는 점선 패턴 설정
+        - 파라미터:점선에서 선이 그려지는 부분과 그렇지 않은 부분의 길이(ex. `setLineDash([5,4,3,2])`--길이 14중 5를 칠하고 이후 4칸은 비우고 이후 3칸 칠하고 2칸은 비움.)
+2. 채우기 스타일
+    - 관련속성
+        - fillStyle: 도형을 채우는 색상(그라데이션,패턴)
+        - globalAlpha: 색상의 투명도(값: 투명0.0~불투명1.0)
+
+3. 그라데이션 스타일: 두 가지 이상 색상이 점진적 변하는 효과
+    - 선형 그라데이션: createLinearGradient(x1,y1,x2,y2)
+    - 방사형 그라데이션: createRadialGradient(x1,y1,r1,x2,y2,r2)
+        - r1은 시작점색깔의 상한, r2는 종료점색깔의 하한, (r2-r1)/2 값만큼 시작점색깔+중간점색깔, 중간점색깔+종료점색깔
+    - 그라데이션 경계색 지정: addColorStop(오프셋,색상)
+        - 오프셋: 경계색 위치(시작점0.0~끝점1.0)
+    - 지정형식
+        ```js
+        ctx.beginPath();
+        let 변수=ctx.createLinear[|Radial]Gradient(x1,y1[,r1],x2,y2[,r2]);
+        변수.addColorStrp(시작점오프셋, 색상);
+        변수.addColorStrp(중간점오프셋, 색상);
+        변수.addColorStrp(종료점오프셋, 색상);
+        ctx.fillStyle=변수;
+        ```
+    
+4. 패턴 스타일 _2
+5. 그림자 스타일 _3
+6. 도형 합성 _3
 
 ### 텍스트와 이미지 그리기 -(4/5)
+4-4-3
+1. 텍스트 그리기
+    - 관련 메서드
+    - 관련 속성
+2. 이미지 삽입하기: drawImage()
 
 ### 도형변환 -(5/5)
+3-4-2-4
+- 도형 변환
+    1. 이동 변환
+    2. 크기 변환
+    3. 회전 변환
+    4. 사용자 정의 변환
+
 <!-- *** -->
 ## Application
 ### example review
