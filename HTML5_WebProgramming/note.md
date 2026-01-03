@@ -1166,18 +1166,68 @@
 <!-- *** -->
 ## Main Concepts
 ### 오디오/비디오 파일 제어 -(1/4)
-6-5-6(예제)
-
-- js를 통해 미디어 파일 재생 제어 가능
+1. js를 통해 미디어 파일 재생 제어 가능
     - 미디어 파일의 재생관련메서드: load(), play(), pause(), canPlayType()--특정 미디어파일 형식 재생가능여부 반환(값:probably, maybe,"")
-    
+2. 미디어 파일 제어/상태 관련 속성
+    - autoplay: 로드되면서 자동재생여부 지정/반환
+    - controls: 플레이어 표시여부 지정/반환
+    - currentSrc: 재생중 미디어파일 url반환
+    - currentTime: 현재재생위치 초단위 지정/반환
+    - defaultMuted: 기본 음소거 상태 지정/반환
+    - defaultPlaybackRate: 기본 재생속도 지정/반환(기본값=1.0)
+    - duration: 총 재생시간을 초단위로 반환
+    - ended: 재생의 종료여부를 반환
+    - error: 미디어파일 오류상태를 `error.code`의 값으로 반환
+    - loop: 반복재생 여부 지정/반환
+    - muted: 음소거 여부 지정/반환
+    - paused: 일시정지 여부 반환
+    - playbackRate: 현재 재생속도 지정/반환
+    - preload: 이미지 로드 시 파일 로드여부 지정/반환
+    - src: 미디어요소 현재 파일경로 지정/반환
+    - volume: 미디어 파일 볼륨 지정/반환
+3. 미디어 관련 주요이벤트
+    - abort: 로딩 중지시 발생
+    - canplay: 재생 시작 가능시 발생
+    - durationchange: duration 속성이 변했을때 발생
+    - ended: 재생 종료 시 발생
+    - error: 로드/재생과정에 오류가 있을 경우 발생
+    - loadstart: 미디어파일 로드시작시 발생
+    - pause: 일시정지되었을때 발생
+    - play: 재생이 시작되었을때 발생
+    - playing: 일시정지/버퍼링을 위해 멈췄다가 재생시작시 발생
+    - progress: 미디어 파일 다운로드시 지속적 발생
+    - ratechange: 재생속도([default]playbackRate속성)가 변경되었을때 발생
+    - seeked: 사용자가 미디어파일의 새로운위치로 이동/건너뜀을 마쳤을때 발생
+    - seeking: 사용자가 미디어파일의 새로운위치로 이동/건너뜀을 시작할때 발생
+    - timeupdate: 현재 재생위치가 바뀌었을때 발생(재생 중 지속적 발생)
+    - volumechange: volume/muted속성이 변경되었을때 발생
+    - waiting: 다음 프레임데이터를 버퍼링하기 위해 미디어가 멈췄을때 발생
 
 ### 드래그 앤 드롭 -(2/4)
-2-5-3-3
-
+- 드래그 앤 드롭: 마우스 이용, 특정 콘텐트를 끌어다놓은 것
+1. 드래그 속성 지정(`draggable="속성값"`): draggable속성 (-> true|false) --어떤 객체도 드래그 가능
+2. 드래그 관련 이벤트 처리(`onXXX="메서드명(event)"`)
+    - 드래그 속성 지정 시 이벤트 지정/컨트롤이 필요
+    - 이벤트 종류와 발생 지점
+        - 드래그소스: (dragleave) **dragstart**
+        - 드래그과정: (dragenter, drag, dragleave), **dragover**
+        - 드롭대상: (dragenter, dragend) **drop**
+    - 이벤트에 따라 처리해야할 작업
+        1. dragstart이벤트: 전달 데이터 저장 -> `setData()`메서드
+        2. dragover이벤트: 기본값 취소해 요소위 다른요소가 드롭될 수 있도록 지정 -> `preventDefault()`메서드
+        3. drop이벤트: 전달하려는 데이터를 가져와 드롭요소에 추가 -> `getData()`+`appendChild()`메서드
+3. 전달 데이터 처리: dataTransfer객체(`event.dataTransfer`)
+    - 드래그앱드롭으로 전달되는 데이터 처리, 이벤트가 발생하는 동안에만 유효하게 사용
+    - 메서드
+        - `setData(type,data)`: 드래그시작시 전달할 데이터 보관(type:"text","url" / data: 드래그되는요소id)
+        - `getData(type)`: 드롭할때 setData()에서 저장한 데이터를 가져옴
+        - `clearData([type])`: 듣래그앤드롭 도중 특정 포맷 데이터 삭제
+        - `setDragImage(이미지변수,x,y)`: 드래그 도중 커서위에 표시할 사용자이미지 지정
+4. 드래그 포인터 변경: effectAllowed속성(dragstar이벤트--드래그하는동안), dropEffect속성(dragenter/dragover이벤트--드래그 끝날때)
+    - 값: none, copy, link, move
 ### 웹 스토리지 -(3/4)
-6-12-3
 
+ 
 ### 위치 정보 -(4/4)
 6-6-4
 
