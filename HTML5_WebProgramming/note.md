@@ -1125,7 +1125,6 @@
             - source: 속성 지정 후에 그려진 도형 / destination: 속성 지정 전에 그려진 도형
 
 ### 텍스트와 이미지 그리기 -(4/5)
--4-3
 1. 텍스트 그리기
     - 관련 메서드
         - strokeText(텍스트,x,y[,maxWidth]): 지정된 위치(x,y) 기준 테두리만 있는 텍스트를 그림.(maxWidth: 텍스트가 주어진 크기에 맞게 조정)
@@ -1169,43 +1168,24 @@
 1. js를 통해 미디어 파일 재생 제어 가능
     - 미디어 파일의 재생관련메서드: load(), play(), pause(), canPlayType()--특정 미디어파일 형식 재생가능여부 반환(값:probably, maybe,"")
 2. 미디어 파일 제어/상태 관련 속성
-    - autoplay: 로드되면서 자동재생여부 지정/반환
-    - controls: 플레이어 표시여부 지정/반환
-    - currentSrc: 재생중 미디어파일 url반환
-    - currentTime: 현재재생위치 초단위 지정/반환
-    - defaultMuted: 기본 음소거 상태 지정/반환
-    - defaultPlaybackRate: 기본 재생속도 지정/반환(기본값=1.0)
-    - duration: 총 재생시간을 초단위로 반환
-    - ended: 재생의 종료여부를 반환
-    - error: 미디어파일 오류상태를 `error.code`의 값으로 반환
-    - loop: 반복재생 여부 지정/반환
-    - muted: 음소거 여부 지정/반환
-    - paused: 일시정지 여부 반환
-    - playbackRate: 현재 재생속도 지정/반환
-    - preload: 이미지 로드 시 파일 로드여부 지정/반환
-    - src: 미디어요소 현재 파일경로 지정/반환
-    - volume: 미디어 파일 볼륨 지정/반환
+    - 지정/반환
+        - autoplay(로드시 자동재생여부), controls(플레이어표시), defaultMuted(기본음소거상태), defaultPlaybackRate(기본재생속도,기본값=1.0),
+        - currentTime(현재재생위치-초단위),
+        - loop(반복재생여부), muted(음소거여부), playbackRate(현재재생속도), volume(볼륨)
+        - preload(이미지로드시 파일로드여부), src(미디어요소의 현재파일경로)
+    - 반환
+        - currentSrc(재생중 미디어파일url), error(미디어파일오류상태-`error.code`값),
+        - duration(총 재생시간-초단위),
+        - ended(재생종료여부), paused(일시정지여부)
 3. 미디어 관련 주요이벤트
-    - abort: 로딩 중지시 발생
-    - canplay: 재생 시작 가능시 발생
-    - durationchange: duration 속성이 변했을때 발생
-    - ended: 재생 종료 시 발생
-    - error: 로드/재생과정에 오류가 있을 경우 발생
-    - loadstart: 미디어파일 로드시작시 발생
-    - pause: 일시정지되었을때 발생
-    - play: 재생이 시작되었을때 발생
-    - playing: 일시정지/버퍼링을 위해 멈췄다가 재생시작시 발생
-    - progress: 미디어 파일 다운로드시 지속적 발생
-    - ratechange: 재생속도([default]playbackRate속성)가 변경되었을때 발생
-    - seeked: 사용자가 미디어파일의 새로운위치로 이동/건너뜀을 마쳤을때 발생
-    - seeking: 사용자가 미디어파일의 새로운위치로 이동/건너뜀을 시작할때 발생
-    - timeupdate: 현재 재생위치가 바뀌었을때 발생(재생 중 지속적 발생)
-    - volumechange: volume/muted속성이 변경되었을때 발생
-    - waiting: 다음 프레임데이터를 버퍼링하기 위해 미디어가 멈췄을때 발생
+    - abort(로딩중지), error(로드/재생과정에 오류발생), loadstart(로드시작), waiting(다음프레임데이터 버퍼링으로 미디어멈춤), progress(미디어다운로드시 지속적발생)
+    - canplay(재생시작가능), ended(재생종료시), pause(일시정지), play(재생시작), playing(일시정지/버퍼링을 위해 멈췄다가 재생시작)
+    - seeked(유저가 미디어파일의 새로운위치로 이동/건너뜀을 마침), seeking("을 시작), timeupdate(현재 재생위치변화-재생중 지속적발생) 
+    - durationchange(duration속성변화), ratechange(재생속도관련속성변화), volumechange(volume/muted속성변화)
 
 ### 드래그 앤 드롭 -(2/4)
-- 드래그 앤 드롭: 마우스 이용, 특정 콘텐트를 끌어다놓은 것
-1. 드래그 속성 지정(`draggable="속성값"`): draggable속성 (-> true|false) --어떤 객체도 드래그 가능
+- 드래그 앤 드롭: 마우스 이용, 특정 콘텐츠를 끌어다놓은 것
+1. 드래그 속성 지정(`draggable="속성값"`): draggable속성 (-> true | false) --어떤 객체도 드래그 가능
 2. 드래그 관련 이벤트 처리(`onXXX="메서드명(event)"`)
     - 드래그 속성 지정 시 이벤트 지정/컨트롤이 필요
     - 이벤트 종류와 발생 지점
@@ -1223,13 +1203,63 @@
         - `getData(type)`: 드롭할때 setData()에서 저장한 데이터를 가져옴
         - `clearData([type])`: 듣래그앤드롭 도중 특정 포맷 데이터 삭제
         - `setDragImage(이미지변수,x,y)`: 드래그 도중 커서위에 표시할 사용자이미지 지정
-4. 드래그 포인터 변경: effectAllowed속성(dragstar이벤트--드래그하는동안), dropEffect속성(dragenter/dragover이벤트--드래그 끝날때)
+4. 드래그 포인터 변경
+    - effectAllowed속성(dragstar이벤트--드래그하는동안)
+    - dropEffect속성(dragenter/dragover이벤트--드래그 끝날때)
     - 값: none, copy, link, move
 ### 웹 스토리지 -(3/4)
-
+1. 웹 스토리지와 종류
+    - 클라이언트측의 데이터 저장영역
+    - vs 쿠키: 용량(도메인당5mb vs 4kb), 네트워크전송(http메세지에 미포함 vs http헤더에 포함,부하o,보안취약), 유효기간(로컬스토리지는 유효기간x vs 유효기간o), 세션(세션 스토리지는 각 윈도우마다 독립적 저장 vs 독립적 데이터저장불가<-모든 윈도우가 고유함)
+    - 저장 데이터: `(키,값)`
+        - 키를 통해서만 값 접근o, 중복 키x
+        - 키,값 모두 대소문자 구분, 따옴표를 사용하는 문자열
+    - 분류
+        - 기준: (저장데이터의) 공유범위, 유효기간
+        - localStorage: 데이터 저장기간 제한X, 도메인마다 별도의 저장영역(같은 도메인의 윈도우끼리는 접근가능)
+        - sessionStrage: 데이터 저장기간 제한O(=세션 종료시), 세션마다 별도의 저장영역(같은 도메인; 다른 윈도우면 접근불가)
+    - 웹 페이지 로드 시 클라이언트에 자동생성
+    - 지원여부: `typeof(Strage)!=="undefined")` or `window.localStorage` or `window.seesionStorage`
+2. 스토리지 객체 속성,메서드
+    - 속성: `length`(저장 데이터 개수 반환)
+    - 메서드: `key(index)`, `getItem(key)`, `setItem(key, value)`, `removeItem(key)`, `clear()`(저장된 모든데이터 삭제)
+        - 데이터 저장: `localStorage.setItem(key, value);`, `localStorage.key=value;`, `localStorage[key]=value;`
+        - 데이터 읽기: `변수=localStorage.getItem(key);`, `변수=localStorage.key;`, `변수=localStorage[key];`
+        - 데이터 삭제: `localStorage.removeItem(key);`, `delete localStorage.key;`, `delete localStorage[key];`
+3. 웹 스토리지 이벤트
+    - window 객체의 `storage` 이벤트
+        - 웹 스토리지에서 삽입,삭제,값 변경 등 변화발생시 다른 모든 윈도우에 변경사실을 전달
+        - not세션스토리지
+    - 속성
+        - key(변화발생한 데이터의 키)
+        - oldValue, newValue
+        - url(이벤트가 발생한 웹문서url), storageArea(이벤트가 발생한 웹스토리지 객체)
  
 ### 위치 정보 -(4/4)
-6-6-4
+1. HTML geolocation API
+    - 유저의 지리적 위치정보를 얻을때 사용(위치정보->개인정보->사용자동의 필요)
+    - `window.navigator.geolocation` 객체 사용
+        - 메서드: getCurrentPosition()-1회, watchPosition()-연속, clearWatch()
+        - 지원여부 확인: `if(navigator.geolocation) { 위치정보획득 } else{ 위치정보미지원 }`
+2. 현재 위치정보: `getCurrentPosition(successCallback, errorCallback, options)` 메서드
+    - 현재 위치정보를 1번만 얻음
+    - 파라미터
+        - successCallback: 위치정보를 성공적으로 얻었을때 호출될 콜백함수명
+            - 콜백함수의 인자로 전달: Position 타입 객체(위치관련정보)
+                - 속성: `coords.latitude`(위도), `coords.ongitude`(경도), `coords.altitude`(고도-미터단위), `coords.accuracy`(위도,경도의 정확도-미터단위), `coords.altitudeAccuracy`(고도의 정확도-미터단위), `coords.heading`(이동중의 진행방향-북쪽기준 시계방향 각도), `coords.speed`(이동중 속도-초당 미터), `timestamp`(위치가 파악된 시간-밀리초단위)
+        - errorCallback(생략가능): 오류발생시 호출될 콜백함수명
+            - 오류콜백함수의 인자로 전달: error객체
+                - 속성: `code`(현재 오류 코드 반환--`PERMISSION_DENINED`, `POSITION_UNAVAILABLE`, `TIMEOUT`, `UNKNOWN_ERROR`), `message`(오류 내용 텍스트)
+        - options(생략가능): 선택사항, 객체형식 전달
+            - enableHighAccuracy(기본값:true): 정확도 높은 위치정보 요청
+            - timeout: 위치정보파악에 대한 제한시간설정, 밀리초단위(지나면 TIMEOUT오류발생)
+            - maximumAge: 파악된 위치정보 유효시간, 밀리초단위
+                - 초과 시 정보폐기후 새 위치정보 파악시도
+3. 연속적인 위치정보: `watchPosition(successCallback, errorCallback, options)` 메서드
+    - 사용자 이동에 따라 변하게 되는 현재위치정보를 연속적 추적
+    - 파라미터: getCurrentPosition()과 동일
+    - 반환: 식별ID반환
+    - `clearWatch(식별ID)`: 연속적 위치추적을 해제시키는 메서드
 
 <!-- *** -->
 ## Application
