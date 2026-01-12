@@ -1,12 +1,18 @@
 <!-- ------------------------------ -->
-# Chapter N.
+# Chapter 
+## .
+### 한줄 요약
+### 키워드 흐름
+### 막혔던 부분/질문
+
+# ~~Chapter N.(legacy)~~
 ### Outline
 ### Flow Diagram
-<!-- ************ -->
+<!-- *** -->
 ## Main Concepts
 ### (minor heading)
 #### (section)
-<!-- ************ -->
+<!-- *** -->
 ## Application
 ### example review
 ### confusing point
